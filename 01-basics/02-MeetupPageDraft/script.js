@@ -64,8 +64,10 @@ export const app = new Vue({
 
   computed: {
     cover() {
-      if (this.meetup.hasOwnProperty('imageId')) {
-        return getMeetupCoverLink(this.meetup);
+       if (Object.prototype.hasOwnProperty.call(this.meetup,'imageId')) {
+         return getMeetupCoverLink(this.meetup);
+      } else {
+         return false;
       }
     },
 

@@ -12,7 +12,7 @@ const MEETUP_ID = 6;
  * @return {string} - ссылка на изображение митапа
  */
 function getMeetupCoverLink(meetup) {
-  return `${API_URL}/images/${meetup.imageId}`;
+    return `${API_URL}/images/${meetup.imageId}`;
 }
 
 async function getMeetup() {
@@ -52,7 +52,10 @@ export const app = new Vue({
   el: '#app',
 
   data: {
-    meetup: [],
+    meetup: {
+      date: null,
+      title: null,
+    },
   },
 
   mounted() {
@@ -61,16 +64,17 @@ export const app = new Vue({
 
   computed: {
     cover() {
-      return getMeetupCoverLink(this.meetup);
+      if (this.meetup.hasOwnProperty('imageId')) {
+        return getMeetupCoverLink(this.meetup);
+      }
     },
 
-    date() {
+    readableDate() {
       return {
-        date: new Date(this.meetup.date),
         localDate: new Date(this.meetup.date).toLocaleString(navigator.language, {
-          year: 'numeric',
+          year:  'numeric',
           month: 'long',
-          day: 'numeric',
+          day:   'numeric',
         }),
         ISODate: new Date(this.meetup.date).toISOString().substr(0, 10),
       };
@@ -84,4 +88,6 @@ export const app = new Vue({
   },
 
   icons: agendaItemIcons,
+
+  titles: agendaItemTitles,
 });

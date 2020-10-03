@@ -34,7 +34,7 @@
               </div>
               <div class="meetup-agenda__item-col">{{ step.startsAt }} - {{ step.endsAt }}</div>
               <div class="meetup-agenda__item-col">
-                <h5 class="meetup-agenda__title" v-html="step.title ? step.title : $options.titles[step.type]"></h5>
+                <h5 class="meetup-agenda__title">{{ step.title ? step.title : $options.titles[step.type] }}</h5>
                 <p v-if="step.speaker" ><span>{{ step.speaker }}</span>
                   <span class="meetup-agenda__dot"></span>
                   <span class="meetup-agenda__lang">{{ step.language }}</span>

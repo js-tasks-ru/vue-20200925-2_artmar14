@@ -15,6 +15,10 @@ function getMeetupCoverLink(meetup) {
   return `${API_URL}/images/${meetup.imageId}`;
 }
 
+async function getMeetup() {
+  let response = await fetch(`${API_URL}/meetups/${MEETUP_ID}`);
+  return await response.json();
+}
 /**
  * Словарь заголовков по умолчанию для всех типов элементов программы
  */
@@ -48,19 +52,36 @@ export const app = new Vue({
   el: '#app',
 
   data: {
-    //
+    meetup: [],
   },
 
   mounted() {
-    // Требуется получить данные митапа с API
+    this.fetchMeetup();
   },
 
   computed: {
-    //
+    cover() {
+      return getMeetupCoverLink(this.meetup);
+    },
+
+    date() {
+      return {
+        date: new Date(this.meetup.date),
+        localDate: new Date(this.meetup.date).toLocaleString(navigator.language, {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+        }),
+        ISODate: new Date(this.meetup.date).toISOString().substr(0, 10),
+      };
+    },
   },
 
   methods: {
-    // Получение данных с API предпочтительнее оформить отдельным методом,
-    // а не писать прямо в mounted()
+    async fetchMeetup() {
+      this.meetup = await getMeetup();
+    },
   },
+
+  icons: agendaItemIcons,
 });

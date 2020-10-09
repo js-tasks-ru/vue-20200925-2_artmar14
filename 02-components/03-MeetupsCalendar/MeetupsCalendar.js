@@ -1,7 +1,3 @@
-/*
-  Полезные функции по работе с датой можно описать вне Vue компонента
- */
-
 export const MeetupsCalendar = {
   name: 'MeetupsCalendar',
 
@@ -9,34 +5,108 @@ export const MeetupsCalendar = {
     <div class="rangepicker__calendar">
       <div class="rangepicker__month-indicator">
         <div class="rangepicker__selector-controls">
-          <button class="rangepicker__selector-control-left"></button>
-          <div>Июнь 2020</div>
-          <button class="rangepicker__selector-control-right"></button>
+          <button class="rangepicker__selector-control-left"
+            @click="prevMonth"></button>
+          <div>{{fullDate}}</div>
+          <button class="rangepicker__selector-control-right"
+            @click="nextMonth"></button>
         </div>
       </div>
       <div class="rangepicker__date-grid">
-        <div class="rangepicker__cell rangepicker__cell_inactive">28</div>
-        <div class="rangepicker__cell rangepicker__cell_inactive">29</div>
-        <div class="rangepicker__cell rangepicker__cell_inactive">30</div>
-        <div class="rangepicker__cell rangepicker__cell_inactive">31</div>
-        <div class="rangepicker__cell">
-          1
-          <a class="rangepicker__event">Митап</a>
-          <a class="rangepicker__event">Митап</a>
-        </div>
-        <div class="rangepicker__cell">2</div>
-        <div class="rangepicker__cell">3</div>
+        <div v-for="singleDay in days" 
+          :key="singleDay.index"
+          :class="{'rangepicker__cell_inactive': singleDay.inactive}"
+          class="rangepicker__cell">
+            {{singleDay.day}}
+            <a v-for="meetup in singleDay.meetups" 
+              :key="meetup.id"
+              class="rangepicker__event">{{meetup.title}}</a>
+          </div>
       </div>
     </div>
   </div>`,
 
-  // Пропсы
+  data: () => {
+    return {
+      date: new Date(),
+    };
+  },
 
-  // В качестве локального состояния требуется хранить что-то,
-  // что позволит определить текущий показывающийся месяц.
-  // Изначально должен показываться текущий месяц
+  computed: {
+    meetupsMap() {
+      const result = {};
 
-  // Вычислимые свойства помогут как с получением списка дней, так и с выводом информации
+      this.meetups.forEach((item) => {
+        const dayID = new Date(item.date).toLocaleDateString();
+        result[dayID] = result[dayID] || [];
+        result[dayID].push(item);
+      });
 
-  // Методы понадобятся для переключения между месяцами
+      return result;
+    },
+    fullDate() {
+      const localeString = this.date.toLocaleString(navigator.language, {
+        month: 'long',
+        year: 'numeric',
+      });
+
+      return localeString.replace(' г.', '');
+    },
+    firstDay() {
+      return new Date(new Date(this.date).setDate(1));
+    },
+    days() {
+      const currentMonth = this.date.getMonth();
+      const firstDayOfMonth = this.firstDay.getDay();
+      const firstDayOfGrid = new Date(this.firstDay).setDate(
+        this.firstDay.getDate() - firstDayOfMonth,
+      );
+      let startDate = new Date(firstDayOfGrid);
+      let hideEnd = false;
+
+      return [...new Array(6 * 7)]
+        .map((_, index) => {
+          startDate.setDate(startDate.getDate() + 1);
+
+          const inactive = startDate.getMonth() !== currentMonth;
+          const dayID = startDate.toLocaleDateString();
+
+          if (index > 0 && inactive && !(index % 7)) {
+            hideEnd = true;
+          }
+
+          return {
+            day: startDate.toLocaleString(navigator.language,{
+              day: 'numeric',
+            }),
+            inactive,
+            dayID,
+            meetups: this.meetupsMap[dayID],
+            hideEnd,
+            index,
+          };
+        })
+        .filter(({hideEnd}) => !hideEnd)
+    },
+  },
+
+  props: {
+    meetups: {
+      type: Array,
+      required: true,
+    },
+  },
+
+  methods: {
+    prevMonth() {
+      const currentMonth = this.firstDay.getMonth();
+
+      this.date = new Date(new Date(this.firstDay).setMonth(currentMonth - 1));
+    },
+    nextMonth() {
+      const currentMonth = this.firstDay.getMonth();
+
+      this.date = new Date(new Date(this.firstDay).setMonth(currentMonth + 1));
+    },
+  },
 };

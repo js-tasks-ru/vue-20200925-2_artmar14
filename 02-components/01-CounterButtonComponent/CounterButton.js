@@ -1,7 +1,7 @@
 export const CounterButton = {
   name: 'CounterButton',
   // Шаблон потребуется отредактировать
-  template: `<button type="button" @click="counter()">{{ count }}</button>`,
+  template: `<button type="button" @click="counter">{{ count }}</button>`,
 
   props: {
     count: {

@@ -104,7 +104,7 @@ describe('SPA/AuthPages', () => {
     it('RegisterPage должен выводить "Требуется ввести полное имя" при сабмите без полного имени', async () => {
       await emailInput.setValue(email);
       await form.trigger('submit');
-      expect(global.alert).toHaveBeenCalledWith('Требуется ввести пароль');
+      expect(global.alert).toHaveBeenCalledWith('Требуется ввести полное имя');
     });
 
     it('RegisterPage должен выводить "Требуется ввести пароль" при сабмите без пароля', async () => {

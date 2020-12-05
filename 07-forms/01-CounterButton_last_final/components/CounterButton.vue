@@ -1,7 +1,5 @@
 <template>
-  <div>
-    <button type="button" @click="clickEvent">{{ count }}</button>
-  </div>
+  <button @click="clickEvent">{{ count_ }}</button>
 </template>
 
 <script>
@@ -15,16 +13,15 @@ export default {
   props: {
     count: {
       type: Number,
-      required: false,
       default: 0,
     },
   },
   watch: {
     count: {
-      handler: function (newValue) {
+      immediate: true,
+      handler(newValue) {
         this.count_ = newValue;
       },
-      immediate: true,
     },
   },
   model: {

@@ -1,5 +1,5 @@
 <template>
-  <select @change="$emit('change', $event.target.value)">
+  <select class="form-control" @change="$emit('change', $event.target.value)">
     <option
       v-for="option in options"
       :value="option.value"

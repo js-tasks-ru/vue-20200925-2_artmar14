@@ -37,6 +37,10 @@ export default {
         text: this.newMessage,
       });
       this.newMessage = '';
+      this.$nextTick(() => {
+        const messenger = this.$el.querySelector('.messages');
+        messenger.scrollTop = messenger.scrollHeight;
+      });
     },
   },
 };

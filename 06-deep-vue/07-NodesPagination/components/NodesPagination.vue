@@ -11,16 +11,16 @@ export default {
       default: 5,
     },
   },
-  computed: {
+  methods: {
     nodes() {
-      let index = (this.page * this.perPage) - this.perPage;
+      let index = this.page * this.perPage - this.perPage;
       let count = this.perPage;
-      return (Array.isArray(this.$slots.default)) ? [...this.$slots.default].splice(index, count) : [];
-    }
+      return Array.isArray(this.$slots.default) ? [...this.$slots.default].splice(index, count) : [];
+    },
   },
   render(h) {
-    return h('div', this.nodes);
-  }
+    return h('div', this.nodes());
+  },
 };
 </script>
 

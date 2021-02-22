@@ -4,10 +4,11 @@ export default {
   render: function (h) {
     let slots = Array.isArray(this.$slots.default)
       ? this.$slots.default.map((slot) => {
-          slot.data.staticClass === undefined
-            ? (slot.data.staticClass = 'fade-list-item')
-            : (slot.data.staticClass += ' fade-list-item');
-          console.log(slot.data.staticClass);
+          if (slot.data.staticClass === undefined) {
+            slot.data.staticClass = 'fade-list-item';
+          } else {
+            slot.data.staticClass += ' fade-list-item';
+          }
           return slot;
         })
       : null;

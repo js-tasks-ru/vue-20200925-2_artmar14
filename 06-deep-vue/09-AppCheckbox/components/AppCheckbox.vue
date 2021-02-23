@@ -35,7 +35,7 @@ export default {
     },
     listeners_() {
       let listeners = { ...this.$listeners };
-      listeners.change = undefined;
+      delete listeners.change;
       return listeners;
     },
   },
